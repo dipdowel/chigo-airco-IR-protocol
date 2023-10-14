@@ -21,6 +21,7 @@ Additionally, it is important to note that all trademarks, trade names, or produ
 
 ## Table of contents
 - Hardware 
+- Switching the AirCo on
 - IR-signal format (analog)
   - Raw IR signal 
   - Normalised IR signal
@@ -36,7 +37,7 @@ Additionally, it is important to note that all trademarks, trade names, or produ
   - DRY MODE, Temperature values
   - AUTOMATIC MODE, Level values
   - MANUFACTURER / DEVICE ID (?)
--  Switching the AC off
+-  Switching the AirCo off
   -  The 'switch-off' commands
 -  Timer
 
@@ -52,6 +53,9 @@ Additionally, it is important to note that all trademarks, trade names, or produ
 
 The indoor unit does not seem to keep its state.
 It does not seem to remember what the last command was or in what mode runs at a given moment. It simply switches to a mode/state specified by a command  incoming from the Remote Control.
+
+##  Switching the AirCo on
+There is no single 'switch-on' command. The unit powers up and starts functioning once it receives any of the mode switching commands described in this document.
 
 ##  IR-signal format (analog)
 
@@ -78,7 +82,7 @@ This is what the analog signal looks like visualised:
 
 
 ### Normalised IR signal
-This is what the same IR signal for command command `F50A 6B94 54AB`  looks like after normalisation:
+This is what the same IR signal for command `F50A 6B94 54AB`  looks like after normalisation:
 
 ``` 
 # 
@@ -96,7 +100,7 @@ And here is the normalised signal visualised atop of the original raw signal:
 I'll use only the normalised signal data from now on.
 
 - `6570 7630` in the beginning of the signal is a sync pulse. It indicates the beginning of the command.
-- `620` stands for `undefined` (or distance between values)
+- `620` stands for `undefined` (or distance between binary values)
 - `1400` -- binary zero
 - `3400` -- binary one
 - `7430 620` in the end of the signal is the end of signal marker. It indicates that all the data has been transferred.
@@ -123,6 +127,7 @@ A command consists of 48 bits arranged into 3 fields of 16 bits each:
 3. bits 32-47: a constant: `54AB`. Probably a manufacturer/device identifier.
 
 ### Command example
+
 
 Command `F50A 6B94 54AB` activates cooling mode at 19°C at medium speed of the fan.
 
@@ -334,8 +339,7 @@ The last 2 bytes of each command are most likely an identifier of the device, so
 .... .... 54AB // remains constant in all the commands.
 ```
 
-
-##  Switching the AC off
+##  Switching the AirCo off
 Peculiar enough, there are many commands for switching off the AC indoor unit.
 There is an individual 'switch off' command per mode (Cool, Fan, Dry, Auto) and temperature (level in case of mode Auto).
 I suspect that the AC indoor unit needs to deactivate certain internal functions upon switching off. 
