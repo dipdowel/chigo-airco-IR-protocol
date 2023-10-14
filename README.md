@@ -1,0 +1,1 @@
+# chigo-airco-IR-protocol
